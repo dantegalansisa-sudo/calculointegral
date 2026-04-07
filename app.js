@@ -1,732 +1,741 @@
 /* ==============================================
-   PROYECTO INTEGRAL DEFINIDA
-   Motor matemático, gráficas y animaciones
+   PROYECTO FINAL - CALCULO INTEGRAL
+   Motor matematico, escenarios, graficas y animaciones
 
-   Este archivo contiene:
-   1. Datos simulados del servidor
-   2. Motor de regresión polinomial (mínimos cuadrados)
-   3. Cálculo de integral definida
-   4. Visualización con Chart.js
-   5. Renderizado de fórmulas con KaTeX
-   6. Animaciones de scroll
+   Contenido:
+   1. Escenarios predefinidos
+   2. Motor de regresion polinomial
+   3. Calculo de integral definida
+   4. Graficas con Chart.js
+   5. Renderizado con KaTeX
+   6. Sistema de escenarios interactivos
+   7. Laboratorio de practica
+   8. Animaciones e inicializacion
    ============================================== */
 
 // ============================================
-// 1. DATOS SIMULADOS DEL SERVIDOR
+// 1. ESCENARIOS PREDEFINIDOS
 // ============================================
 
-// Datos de monitoreo: solicitudes/hora en un servidor API de e-commerce
-// durante una jornada laboral de 8 horas (8:00 AM - 4:00 PM)
-const DATOS = {
-    tiempo: [0, 1, 2, 3, 4, 5, 6, 7, 8],
-    solicitudes: [120, 205, 340, 435, 410, 390, 310, 200, 85],
-    horas: [
-        '8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM',
-        '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'
-    ],
-    observaciones: [
-        'Inicio de jornada, pocos usuarios conectados',
-        'Usuarios matutinos comienzan a navegar',
-        'Incremento de actividad: búsquedas y navegación',
-        'Hora pico de la mañana: máximas compras',
-        'Actividad alta sostenida al mediodía',
-        'Ligera caída durante hora de almuerzo',
-        'Actividad moderada en la tarde',
-        'Usuarios comienzan a desconectarse',
-        'Fin de jornada, mínima actividad'
-    ]
+const ESCENARIOS = {
+    ecommerce: {
+        nombre: 'API E-Commerce "ShopFlow"',
+        descripcion: 'Servidor API REST de una plataforma de e-commerce. Se monitorean las solicitudes HTTP (navegacion, busqueda, compras) durante 8 horas de jornada laboral.',
+        origen: 'Simulacion basada en patrones reales de trafico web de plataformas e-commerce (comportamiento tipico documentado en estudios de Cloudflare y AWS).',
+        tiempo: [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        solicitudes: [120, 205, 340, 435, 410, 390, 310, 200, 85],
+        horas: ['8:00 AM', '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM'],
+        observaciones: [
+            'Inicio de jornada, pocos usuarios',
+            'Usuarios matutinos comienzan a navegar',
+            'Aumento de actividad: busquedas',
+            'Hora pico: maximas compras',
+            'Actividad alta sostenida',
+            'Ligera caida en hora de almuerzo',
+            'Actividad moderada en la tarde',
+            'Usuarios empiezan a desconectar',
+            'Fin de jornada, minima actividad'
+        ],
+        unidad: 'solicitudes/hora',
+        limA: 0,
+        limB: 8
+    },
+    streaming: {
+        nombre: 'Servidor de Streaming "StreamRD"',
+        descripcion: 'Plataforma de streaming de video. Se monitorean las conexiones simultaneas por hora desde el mediodia hasta la medianoche (12 horas).',
+        origen: 'Simulacion basada en patrones de consumo de plataformas como Netflix y Disney+, donde el pico ocurre en horario nocturno.',
+        tiempo: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+        solicitudes: [80, 95, 110, 140, 190, 280, 370, 440, 500, 520, 460, 310, 140],
+        horas: ['12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM', '9:00 PM', '10:00 PM', '11:00 PM', '12:00 AM'],
+        observaciones: [
+            'Mediodia, baja actividad',
+            'Inicio de tarde',
+            'Actividad ligera',
+            'Estudiantes conectando',
+            'Aumento gradual',
+            'Salida del trabajo, mas usuarios',
+            'Hora prime comienza',
+            'Alta demanda de contenido',
+            'Pico de audiencia nocturna',
+            'Maximo del dia',
+            'Descenso gradual',
+            'Usuarios apagando',
+            'Medianoche, actividad minima'
+        ],
+        unidad: 'conexiones/hora',
+        limA: 0,
+        limB: 12
+    },
+    delivery: {
+        nombre: 'App de Delivery "QuickFood"',
+        descripcion: 'Aplicacion de delivery de comida. Se registran los pedidos por hora durante 10 horas de operacion (10 AM - 8 PM).',
+        origen: 'Simulacion basada en patrones de apps de delivery como Uber Eats y PedidosYa, con picos en horarios de almuerzo y cena.',
+        tiempo: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+        solicitudes: [45, 85, 160, 230, 195, 110, 145, 220, 310, 240, 80],
+        horas: ['10:00 AM', '11:00 AM', '12:00 PM', '1:00 PM', '2:00 PM', '3:00 PM', '4:00 PM', '5:00 PM', '6:00 PM', '7:00 PM', '8:00 PM'],
+        observaciones: [
+            'Apertura, pocos pedidos',
+            'Usuarios revisan menu',
+            'Inicio pico almuerzo',
+            'Maximo almuerzo',
+            'Descenso post-almuerzo',
+            'Valle de la tarde',
+            'Preparacion para cena',
+            'Pedidos de cena comienzan',
+            'Pico de cena',
+            'Pedidos tardios',
+            'Cierre de operacion'
+        ],
+        unidad: 'pedidos/hora',
+        limA: 0,
+        limB: 10
+    }
 };
 
-// Estado global de la aplicación
+// ============================================
+// 2. ESTADO GLOBAL
+// ============================================
+
 let estado = {
-    coeficientes: [],   // Coeficientes del polinomio actual
-    grado: 3,           // Grado del polinomio seleccionado
-    r2: 0,              // Coeficiente de determinación
-    integralValor: 0,   // Resultado de la integral
-    charts: {}          // Referencias a las gráficas
+    escenarioActual: 'ecommerce',
+    coeficientes: [],
+    grado: 3,
+    r2: 0,
+    integralValor: 0,
+    datosActuales: null, // Referencia al escenario activo
+    charts: {}
 };
 
 // ============================================
-// 2. MOTOR MATEMÁTICO - REGRESIÓN POLINOMIAL
+// 3. MOTOR MATEMATICO
 // ============================================
 
-/**
- * Resuelve un sistema de ecuaciones lineales por eliminación gaussiana.
- * Recibe la matriz aumentada [A|b] y retorna el vector solución.
- */
+/** Resuelve sistema de ecuaciones por eliminacion gaussiana con pivoteo */
 function resolverSistema(matriz) {
     const n = matriz.length;
-
-    // Eliminación hacia adelante con pivoteo parcial
     for (let col = 0; col < n; col++) {
-        // Buscar el pivote más grande en la columna
         let maxFila = col;
         for (let fila = col + 1; fila < n; fila++) {
-            if (Math.abs(matriz[fila][col]) > Math.abs(matriz[maxFila][col])) {
-                maxFila = fila;
-            }
+            if (Math.abs(matriz[fila][col]) > Math.abs(matriz[maxFila][col])) maxFila = fila;
         }
-        // Intercambiar filas
         [matriz[col], matriz[maxFila]] = [matriz[maxFila], matriz[col]];
-
-        // Eliminar por debajo del pivote
         for (let fila = col + 1; fila < n; fila++) {
             const factor = matriz[fila][col] / matriz[col][col];
-            for (let j = col; j <= n; j++) {
-                matriz[fila][j] -= factor * matriz[col][j];
-            }
+            for (let j = col; j <= n; j++) matriz[fila][j] -= factor * matriz[col][j];
         }
     }
-
-    // Sustitución hacia atrás
-    const solucion = new Array(n).fill(0);
+    const sol = new Array(n).fill(0);
     for (let i = n - 1; i >= 0; i--) {
-        solucion[i] = matriz[i][n];
-        for (let j = i + 1; j < n; j++) {
-            solucion[i] -= matriz[i][j] * solucion[j];
-        }
-        solucion[i] /= matriz[i][i];
+        sol[i] = matriz[i][n];
+        for (let j = i + 1; j < n; j++) sol[i] -= matriz[i][j] * sol[j];
+        sol[i] /= matriz[i][i];
     }
-
-    return solucion;
+    return sol;
 }
 
-/**
- * Realiza regresión polinomial de grado dado usando mínimos cuadrados.
- * Retorna los coeficientes [a0, a1, a2, ...] donde p(x) = a0 + a1*x + a2*x² + ...
- */
+/** Regresion polinomial: retorna coeficientes [a0, a1, a2, ...] */
 function regresionPolinomial(xDatos, yDatos, grado) {
     const n = xDatos.length;
-    const m = grado + 1; // Número de coeficientes
-
-    // Construir la matriz normal: (Xᵀ·X)·a = Xᵀ·y
-    // Matriz aumentada de tamaño m × (m+1)
-    const matriz = [];
+    const m = grado + 1;
+    const mat = [];
     for (let i = 0; i < m; i++) {
-        matriz[i] = new Array(m + 1).fill(0);
+        mat[i] = new Array(m + 1).fill(0);
         for (let j = 0; j < m; j++) {
-            // Elemento (i,j) = Σ xₖ^(i+j)
-            for (let k = 0; k < n; k++) {
-                matriz[i][j] += Math.pow(xDatos[k], i + j);
-            }
+            for (let k = 0; k < n; k++) mat[i][j] += Math.pow(xDatos[k], i + j);
         }
-        // Columna del lado derecho: Σ yₖ · xₖ^i
-        for (let k = 0; k < n; k++) {
-            matriz[i][m] += yDatos[k] * Math.pow(xDatos[k], i);
-        }
+        for (let k = 0; k < n; k++) mat[i][m] += yDatos[k] * Math.pow(xDatos[k], i);
     }
-
-    return resolverSistema(matriz);
+    return resolverSistema(mat);
 }
 
-/**
- * Evalúa el polinomio en un punto x.
- * coefs = [a0, a1, a2, ...] → p(x) = a0 + a1*x + a2*x² + ...
- */
-function evaluarPolinomio(coefs, x) {
-    let resultado = 0;
-    for (let i = 0; i < coefs.length; i++) {
-        resultado += coefs[i] * Math.pow(x, i);
-    }
-    return resultado;
+/** Evalua polinomio en un punto */
+function evalPoli(coefs, x) {
+    let r = 0;
+    for (let i = 0; i < coefs.length; i++) r += coefs[i] * Math.pow(x, i);
+    return r;
 }
 
-/**
- * Calcula el coeficiente de determinación R².
- * Mide qué tan bien el polinomio se ajusta a los datos (1 = perfecto).
- */
-function calcularR2(xDatos, yDatos, coefs) {
-    const n = yDatos.length;
-    const yPromedio = yDatos.reduce((a, b) => a + b, 0) / n;
-
-    let ssRes = 0; // Suma de cuadrados de residuos
-    let ssTot = 0; // Suma de cuadrados total
-
+/** Calcula R-cuadrado */
+function calcularR2(xD, yD, coefs) {
+    const n = yD.length;
+    const yProm = yD.reduce((a, b) => a + b, 0) / n;
+    let ssRes = 0, ssTot = 0;
     for (let i = 0; i < n; i++) {
-        const yPredicho = evaluarPolinomio(coefs, xDatos[i]);
-        ssRes += Math.pow(yDatos[i] - yPredicho, 2);
-        ssTot += Math.pow(yDatos[i] - yPromedio, 2);
+        ssRes += Math.pow(yD[i] - evalPoli(coefs, xD[i]), 2);
+        ssTot += Math.pow(yD[i] - yProm, 2);
     }
-
-    return 1 - (ssRes / ssTot);
+    return 1 - ssRes / ssTot;
 }
 
-/**
- * Calcula la integral definida de un polinomio entre a y b.
- * Usa la antiderivada: ∫(a0 + a1*x + a2*x² + ...) dx = a0*x + (a1/2)*x² + (a2/3)*x³ + ...
- * Luego evalúa F(b) - F(a).
- */
+/** Integral definida del polinomio usando antiderivada */
 function integralDefinida(coefs, a, b) {
-    // Evaluar la antiderivada en un punto
     function F(t) {
-        let valor = 0;
-        for (let i = 0; i < coefs.length; i++) {
-            valor += (coefs[i] / (i + 1)) * Math.pow(t, i + 1);
-        }
-        return valor;
+        let v = 0;
+        for (let i = 0; i < coefs.length; i++) v += (coefs[i] / (i + 1)) * Math.pow(t, i + 1);
+        return v;
     }
     return F(b) - F(a);
 }
 
 // ============================================
-// 3. FORMATO DE FÓRMULAS PARA KATEX
+// 4. FORMATO LATEX
 // ============================================
 
-/**
- * Convierte coeficientes a string LaTeX para mostrar la función.
- * Ejemplo: [7.2, 16.1, -3.5] → "r(t) = -3.5t^{2} + 16.1t + 7.2"
- */
-function formatearPolinomioLatex(coefs) {
-    const terminos = [];
-
-    // Recorrer de mayor a menor grado para el formato estándar
-    for (let i = coefs.length - 1; i >= 0; i--) {
-        const c = coefs[i];
-        if (Math.abs(c) < 0.001) continue; // Ignorar coeficientes muy pequeños
-
-        const valor = Math.abs(c);
-        const signo = c >= 0 ? '+' : '-';
-        let termino = '';
-
-        // Formatear el coeficiente con decimales razonables
-        const valorStr = valor.toFixed(2).replace(/\.?0+$/, '');
-
-        if (i === 0) {
-            termino = valorStr;
-        } else if (i === 1) {
-            termino = (valor === 1 ? '' : valorStr) + 't';
-        } else {
-            termino = (valor === 1 ? '' : valorStr) + 't^{' + i + '}';
-        }
-
-        if (terminos.length === 0) {
-            // Primer término: incluir signo solo si es negativo
-            terminos.push(c < 0 ? '-' + termino : termino);
-        } else {
-            terminos.push(signo + ' ' + termino);
-        }
-    }
-
-    return terminos.join(' ');
-}
-
-/**
- * Genera el LaTeX de la antiderivada del polinomio.
- */
-function formatearAntiderivadaLatex(coefs) {
-    const terminos = [];
-
+/** Formatea coeficientes como LaTeX */
+function poliLatex(coefs) {
+    const terms = [];
     for (let i = coefs.length - 1; i >= 0; i--) {
         const c = coefs[i];
         if (Math.abs(c) < 0.001) continue;
-
-        const divisor = i + 1;
-        const valor = Math.abs(c);
-        const signo = c >= 0 ? '+' : '-';
-        let termino = '';
-
-        // Si el coeficiente es divisible limpio, simplificar
-        const fraccion = valor / divisor;
-        const fracStr = fraccion.toFixed(4).replace(/\.?0+$/, '');
-
-        const potencia = i + 1;
-        if (potencia === 1) {
-            termino = fracStr + 't';
-        } else {
-            termino = fracStr + 't^{' + potencia + '}';
-        }
-
-        if (terminos.length === 0) {
-            terminos.push(c < 0 ? '-' + termino : termino);
-        } else {
-            terminos.push(signo + ' ' + termino);
-        }
+        const v = Math.abs(c);
+        const s = c >= 0 ? '+' : '-';
+        const vs = v.toFixed(2).replace(/\.?0+$/, '');
+        let t = '';
+        if (i === 0) t = vs;
+        else if (i === 1) t = (v === 1 ? '' : vs) + 't';
+        else t = (v === 1 ? '' : vs) + 't^{' + i + '}';
+        terms.push(terms.length === 0 ? (c < 0 ? '-' + t : t) : s + ' ' + t);
     }
+    return terms.join(' ') || '0';
+}
 
-    return terminos.join(' ');
+/** Formatea antiderivada como LaTeX */
+function antiderivadaLatex(coefs) {
+    const terms = [];
+    for (let i = coefs.length - 1; i >= 0; i--) {
+        const c = coefs[i];
+        if (Math.abs(c) < 0.001) continue;
+        const frac = Math.abs(c) / (i + 1);
+        const s = c >= 0 ? '+' : '-';
+        const fs = frac.toFixed(4).replace(/\.?0+$/, '');
+        const p = i + 1;
+        const t = p === 1 ? fs + 't' : fs + 't^{' + p + '}';
+        terms.push(terms.length === 0 ? (c < 0 ? '-' + t : t) : s + ' ' + t);
+    }
+    return terms.join(' ') || '0';
 }
 
 // ============================================
-// 4. GRÁFICAS CON CHART.JS
+// 5. GRAFICAS
 // ============================================
 
-// Colores del tema
-const COLORES = {
-    acento: '#00d4ff',
-    acentoRgba: 'rgba(0, 212, 255, 0.8)',
+const COL = {
+    azul: '#2563eb',
+    azulRgba: 'rgba(37,99,235,0.8)',
     purpura: '#7c3aed',
-    areaFill: 'rgba(0, 212, 255, 0.15)',
-    areaFillFuerte: 'rgba(0, 212, 255, 0.25)',
-    grid: 'rgba(255, 255, 255, 0.06)',
-    texto: '#9090b0',
-    puntos: '#00d4ff',
-    curva: '#7c3aed'
+    areaFill: 'rgba(37,99,235,0.12)',
+    areaFuerte: 'rgba(37,99,235,0.22)',
+    grid: 'rgba(0,0,0,0.06)',
+    texto: '#64748b'
 };
 
-// Opciones comunes de las gráficas
-function opcionesBase(tituloX, tituloY) {
+function opcionesBase(tX, tY) {
     return {
         responsive: true,
         maintainAspectRatio: true,
         plugins: {
-            legend: {
-                labels: { color: COLORES.texto, font: { family: 'Inter', size: 12 } }
-            }
+            legend: { labels: { color: COL.texto, font: { family: 'Inter', size: 12 } } }
         },
         scales: {
             x: {
-                title: { display: true, text: tituloX, color: COLORES.texto, font: { family: 'Inter' } },
-                grid: { color: COLORES.grid },
-                ticks: { color: COLORES.texto }
+                title: { display: true, text: tX, color: COL.texto, font: { family: 'Inter' } },
+                grid: { color: COL.grid },
+                ticks: { color: COL.texto }
             },
             y: {
-                title: { display: true, text: tituloY, color: COLORES.texto, font: { family: 'Inter' } },
-                grid: { color: COLORES.grid },
-                ticks: { color: COLORES.texto },
+                title: { display: true, text: tY, color: COL.texto, font: { family: 'Inter' } },
+                grid: { color: COL.grid },
+                ticks: { color: COL.texto },
                 beginAtZero: true
             }
         }
     };
 }
 
-/** Crea la gráfica de dispersión con los datos crudos */
 function crearGraficaDispersion() {
     const ctx = document.getElementById('chartDispersion');
     if (!ctx) return;
-
+    const d = estado.datosActuales;
+    if (estado.charts.dispersion) estado.charts.dispersion.destroy();
     estado.charts.dispersion = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [{
                 label: 'Datos observados',
-                data: DATOS.tiempo.map((t, i) => ({ x: t, y: DATOS.solicitudes[i] })),
-                backgroundColor: COLORES.acentoRgba,
-                borderColor: COLORES.acento,
+                data: d.tiempo.map((t, i) => ({ x: t, y: d.solicitudes[i] })),
+                backgroundColor: COL.azulRgba,
+                borderColor: COL.azul,
                 pointRadius: 7,
                 pointHoverRadius: 10,
                 pointBorderWidth: 2
             }]
         },
-        options: opcionesBase('Tiempo (horas)', 'Solicitudes / hora')
+        options: opcionesBase('Tiempo (horas)', d.unidad || 'solicitudes/hora')
     });
 }
 
-/** Crea la gráfica de regresión: datos + curva ajustada */
 function crearGraficaRegresion() {
     const ctx = document.getElementById('chartRegresion');
     if (!ctx) return;
-
-    // Generar puntos de la curva (suavizada con muchos puntos)
-    const curvaX = [];
-    const curvaY = [];
-    for (let t = 0; t <= 8; t += 0.05) {
-        curvaX.push(t);
-        curvaY.push(evaluarPolinomio(estado.coeficientes, t));
-    }
-
-    // Destruir gráfica anterior si existe
+    const d = estado.datosActuales;
+    const tMax = Math.max(...d.tiempo);
+    const cx = [], cy = [];
+    for (let t = 0; t <= tMax; t += 0.05) { cx.push(t); cy.push(evalPoli(estado.coeficientes, t)); }
     if (estado.charts.regresion) estado.charts.regresion.destroy();
-
     estado.charts.regresion = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [
                 {
-                    label: 'Curva r(t) ajustada',
-                    data: curvaX.map((x, i) => ({ x, y: curvaY[i] })),
-                    type: 'line',
-                    borderColor: COLORES.curva,
-                    borderWidth: 3,
-                    pointRadius: 0,
-                    tension: 0.4,
-                    order: 2
+                    label: 'Curva r(t)',
+                    data: cx.map((x, i) => ({ x, y: cy[i] })),
+                    type: 'line', borderColor: COL.purpura, borderWidth: 3,
+                    pointRadius: 0, tension: 0.4, order: 2
                 },
                 {
                     label: 'Datos observados',
-                    data: DATOS.tiempo.map((t, i) => ({ x: t, y: DATOS.solicitudes[i] })),
-                    backgroundColor: COLORES.acentoRgba,
-                    borderColor: COLORES.acento,
-                    pointRadius: 7,
-                    pointHoverRadius: 10,
-                    pointBorderWidth: 2,
-                    order: 1
+                    data: d.tiempo.map((t, i) => ({ x: t, y: d.solicitudes[i] })),
+                    backgroundColor: COL.azulRgba, borderColor: COL.azul,
+                    pointRadius: 7, pointBorderWidth: 2, order: 1
                 }
             ]
         },
-        options: opcionesBase('Tiempo (horas)', 'Solicitudes / hora')
+        options: opcionesBase('Tiempo (horas)', d.unidad || 'solicitudes/hora')
     });
 }
 
-/** Crea la gráfica de la integral: área bajo la curva */
 function crearGraficaIntegral(a, b) {
     const ctx = document.getElementById('chartIntegral');
     if (!ctx) return;
-
-    const curvaX = [];
-    const curvaY = [];
-    const areaX = [];
-    const areaY = [];
-
-    // Curva completa
-    for (let t = 0; t <= 8; t += 0.05) {
-        const y = evaluarPolinomio(estado.coeficientes, t);
-        curvaX.push(t);
-        curvaY.push(y);
-    }
-
-    // Área solo en el intervalo [a, b]
-    for (let t = a; t <= b; t += 0.05) {
-        const y = evaluarPolinomio(estado.coeficientes, t);
-        areaX.push(t);
-        areaY.push(y);
-    }
-
+    const d = estado.datosActuales;
+    const tMax = Math.max(...d.tiempo);
+    const cx = [], cy = [], ax = [], ay = [];
+    for (let t = 0; t <= tMax; t += 0.05) { cx.push(t); cy.push(evalPoli(estado.coeficientes, t)); }
+    for (let t = a; t <= b; t += 0.05) { ax.push(t); ay.push(evalPoli(estado.coeficientes, t)); }
     if (estado.charts.integral) estado.charts.integral.destroy();
-
     estado.charts.integral = new Chart(ctx, {
         type: 'scatter',
         data: {
             datasets: [
                 {
-                    label: 'Área = Integral definida',
-                    data: areaX.map((x, i) => ({ x, y: areaY[i] })),
-                    type: 'line',
-                    fill: 'origin',
-                    backgroundColor: COLORES.areaFillFuerte,
-                    borderColor: 'transparent',
-                    pointRadius: 0,
-                    tension: 0.4,
-                    order: 3
+                    label: 'Area = Integral',
+                    data: ax.map((x, i) => ({ x, y: ay[i] })),
+                    type: 'line', fill: 'origin', backgroundColor: COL.areaFuerte,
+                    borderColor: 'transparent', pointRadius: 0, tension: 0.4, order: 3
                 },
                 {
                     label: 'r(t)',
-                    data: curvaX.map((x, i) => ({ x, y: curvaY[i] })),
-                    type: 'line',
-                    borderColor: COLORES.curva,
-                    borderWidth: 3,
-                    pointRadius: 0,
-                    fill: false,
-                    tension: 0.4,
-                    order: 2
+                    data: cx.map((x, i) => ({ x, y: cy[i] })),
+                    type: 'line', borderColor: COL.purpura, borderWidth: 3,
+                    pointRadius: 0, fill: false, tension: 0.4, order: 2
                 },
                 {
-                    label: 'Datos observados',
-                    data: DATOS.tiempo.map((t, i) => ({ x: t, y: DATOS.solicitudes[i] })),
-                    backgroundColor: COLORES.acentoRgba,
-                    borderColor: COLORES.acento,
-                    pointRadius: 6,
-                    pointBorderWidth: 2,
-                    order: 1
+                    label: 'Datos',
+                    data: d.tiempo.map((t, i) => ({ x: t, y: d.solicitudes[i] })),
+                    backgroundColor: COL.azulRgba, borderColor: COL.azul,
+                    pointRadius: 6, pointBorderWidth: 2, order: 1
                 }
             ]
         },
-        options: opcionesBase('Tiempo (horas)', 'Solicitudes / hora')
+        options: opcionesBase('Tiempo (horas)', d.unidad || 'solicitudes/hora')
+    });
+}
+
+// Grafica del laboratorio (todo en uno)
+function crearGraficaLab(tData, rData, coefs, a, b) {
+    const ctx = document.getElementById('chartLab');
+    if (!ctx) return;
+    const tMax = Math.max(...tData);
+    const cx = [], cy = [], ax = [], ay = [];
+    for (let t = 0; t <= tMax; t += 0.05) { cx.push(t); cy.push(evalPoli(coefs, t)); }
+    for (let t = a; t <= b; t += 0.05) { ax.push(t); ay.push(evalPoli(coefs, t)); }
+    if (estado.charts.lab) estado.charts.lab.destroy();
+    estado.charts.lab = new Chart(ctx, {
+        type: 'scatter',
+        data: {
+            datasets: [
+                {
+                    label: 'Area = Integral',
+                    data: ax.map((x, i) => ({ x, y: ay[i] })),
+                    type: 'line', fill: 'origin', backgroundColor: COL.areaFuerte,
+                    borderColor: 'transparent', pointRadius: 0, tension: 0.4, order: 3
+                },
+                {
+                    label: 'r(t)',
+                    data: cx.map((x, i) => ({ x, y: cy[i] })),
+                    type: 'line', borderColor: COL.purpura, borderWidth: 3,
+                    pointRadius: 0, fill: false, tension: 0.4, order: 2
+                },
+                {
+                    label: 'Datos',
+                    data: tData.map((t, i) => ({ x: t, y: rData[i] })),
+                    backgroundColor: COL.azulRgba, borderColor: COL.azul,
+                    pointRadius: 7, pointBorderWidth: 2, order: 1
+                }
+            ]
+        },
+        options: opcionesBase('Tiempo', 'r(t)')
     });
 }
 
 // ============================================
-// 5. RENDERIZADO DE SECCIONES
+// 6. RENDERIZADO DE SECCIONES
 // ============================================
 
-/** Llena la tabla de datos */
-function renderizarTabla() {
+function renderTabla() {
     const tbody = document.getElementById('datosBody');
     if (!tbody) return;
-
-    tbody.innerHTML = DATOS.tiempo.map((t, i) =>
+    const d = estado.datosActuales;
+    tbody.innerHTML = d.tiempo.map((t, i) =>
         `<tr>
             <td><strong>${t}</strong></td>
-            <td>${DATOS.horas[i]}</td>
-            <td><strong>${DATOS.solicitudes[i]}</strong></td>
-            <td>${DATOS.observaciones[i]}</td>
+            <td>${d.horas[i] || t}</td>
+            <td><strong>${d.solicitudes[i]}</strong></td>
+            <td>${d.observaciones[i] || ''}</td>
         </tr>`
     ).join('');
 }
 
-/** Renderiza una expresión KaTeX en un elemento */
-function renderKatex(elementId, latex, displayMode = true) {
-    const el = document.getElementById(elementId);
-    if (!el) return;
-    try {
-        katex.render(latex, el, { displayMode, throwOnError: false });
-    } catch (e) {
-        el.textContent = latex;
-    }
+function renderKatex(id, latex, display = true) {
+    const el = document.getElementById(id);
+    if (!el || typeof katex === 'undefined') return;
+    try { katex.render(latex, el, { displayMode: display, throwOnError: false }); }
+    catch(e) { el.textContent = latex; }
 }
 
-/** Renderiza las fórmulas matemáticas principales */
-function renderizarFormulas() {
-    // Fórmula del hero
-    renderKatex('heroFormula',
-        '\\int_{0}^{8} r(t)\\, dt = \\text{Total de solicitudes}'
-    );
+function renderFormulas() {
+    if (typeof katex === 'undefined') return;
+    const pl = poliLatex(estado.coeficientes);
 
-    // Fórmula de introducción
-    renderKatex('mathIntro',
-        '\\int_{a}^{b} r(t)\\, dt'
-    );
-
-    // Función encontrada
-    const poliLatex = formatearPolinomioLatex(estado.coeficientes);
-    renderKatex('formulaDisplay', 'r(t) = ' + poliLatex);
-
-    // Planteamiento de la integral
+    renderKatex('heroFormula', '\\int_{0}^{8} r(t)\\, dt = \\text{Total acumulado}');
+    renderKatex('mathIntro', '\\int_{a}^{b} r(t)\\, dt');
+    renderKatex('formulaDisplay', 'r(t) = ' + pl);
     renderKatex('integralSetup',
-        '\\int_{a}^{b} r(t)\\, dt = \\int_{a}^{b} \\left(' + poliLatex + '\\right) dt'
+        '\\int_{a}^{b} r(t)\\, dt = \\int_{a}^{b} \\left(' + pl + '\\right) dt'
     );
 }
 
-/** Muestra el procedimiento paso a paso del cálculo de la integral */
 function mostrarProcedimiento(a, b) {
     const div = document.getElementById('procedimiento');
     if (!div) return;
+    const pl = poliLatex(estado.coeficientes);
+    const al = antiderivadaLatex(estado.coeficientes);
 
-    const poliLatex = formatearPolinomioLatex(estado.coeficientes);
-    const antiLatex = formatearAntiderivadaLatex(estado.coeficientes);
-
-    // Evaluar F(b) y F(a)
     function F(t) {
-        let val = 0;
-        for (let i = 0; i < estado.coeficientes.length; i++) {
-            val += (estado.coeficientes[i] / (i + 1)) * Math.pow(t, i + 1);
-        }
-        return val;
+        let v = 0;
+        for (let i = 0; i < estado.coeficientes.length; i++)
+            v += (estado.coeficientes[i] / (i + 1)) * Math.pow(t, i + 1);
+        return v;
     }
-    const Fb = F(b);
-    const Fa = F(a);
-    const resultado = Fb - Fa;
-
-    // Guardar resultado en el estado
-    estado.integralValor = resultado;
+    const Fb = F(b), Fa = F(a);
+    estado.integralValor = Fb - Fa;
 
     const pasos = [
-        {
-            titulo: 'Paso 1',
-            latex: `\\int_{${a}}^{${b}} \\left(${poliLatex}\\right) dt`
-        },
-        {
-            titulo: 'Paso 2: Antiderivada',
-            latex: `F(t) = ${antiLatex}`
-        },
-        {
-            titulo: 'Paso 3: Evaluar',
-            latex: `F(${b}) - F(${a}) = ${Fb.toFixed(2)} - (${Fa.toFixed(2)})`
-        },
-        {
-            titulo: 'Resultado',
-            latex: `\\boxed{\\int_{${a}}^{${b}} r(t)\\, dt = ${resultado.toFixed(2)} \\text{ solicitudes}}`
-        }
+        { t: 'Paso 1', l: `\\int_{${a}}^{${b}} \\left(${pl}\\right) dt` },
+        { t: 'Paso 2: Antiderivada', l: `F(t) = ${al}` },
+        { t: 'Paso 3: Evaluar', l: `F(${b}) - F(${a}) = ${Fb.toFixed(2)} - (${Fa.toFixed(2)})` },
+        { t: 'Resultado', l: `\\boxed{\\int_{${a}}^{${b}} r(t)\\, dt \\approx ${estado.integralValor.toFixed(2)}}` }
     ];
 
     div.innerHTML = pasos.map(p =>
         `<div class="paso">
-            <span class="paso-num">${p.titulo}</span>
-            <div class="paso-contenido" id="paso-${p.titulo.replace(/\s+/g, '')}"></div>
+            <span class="paso-num">${p.t}</span>
+            <div class="paso-contenido" id="p-${p.t.replace(/\s+/g, '')}"></div>
         </div>`
     ).join('');
 
-    // Renderizar KaTeX en cada paso
-    pasos.forEach(p => {
-        const id = 'paso-' + p.titulo.replace(/\s+/g, '');
-        renderKatex(id, p.latex);
-    });
+    pasos.forEach(p => renderKatex('p-' + p.t.replace(/\s+/g, ''), p.l));
 }
 
-/** Muestra el resultado grande y actualiza estadísticas */
 function mostrarResultado(a, b) {
-    const resultado = estado.integralValor;
+    const res = estado.integralValor;
     const horas = b - a;
-    const promedio = resultado / horas;
-
-    // Encontrar el valor pico de r(t) en el intervalo
+    const prom = res / horas;
+    const d = estado.datosActuales;
     let pico = 0;
+    const tMax = Math.max(...d.tiempo);
     for (let t = a; t <= b; t += 0.01) {
-        const val = evaluarPolinomio(estado.coeficientes, t);
-        if (val > pico) pico = val;
+        const v = evalPoli(estado.coeficientes, t);
+        if (v > pico) pico = v;
     }
 
-    // Mostrar resultado con animación de contador
-    const resultadoBox = document.getElementById('resultadoBox');
-    if (resultadoBox) resultadoBox.style.display = 'block';
-    animarContador('resultadoValor', resultado, 0);
+    const box = document.getElementById('resultadoBox');
+    if (box) box.style.display = 'block';
 
-    // Estadísticas
-    animarContador('statTotal', resultado, 0);
-    animarContador('statPromedio', promedio, 0);
-    animarContador('statPico', pico, 0);
+    const unidad = d.unidad || 'solicitudes';
+    const uEl = document.getElementById('resultadoUnidad');
+    if (uEl) uEl.textContent = unidad.split('/')[0];
+
+    animarContador('resultadoValor', res);
+    animarContador('statTotal', res);
+    animarContador('statPromedio', prom);
+    animarContador('statPico', pico);
 
     const r2El = document.getElementById('statR2');
     if (r2El) r2El.textContent = (estado.r2 * 100).toFixed(1) + '%';
 
-    // Texto de interpretación
-    const interpEl = document.getElementById('interpretacionTexto');
-    if (interpEl) {
-        interpEl.innerHTML = `
-            <p>El resultado de la integral definida indica que el servidor API de <strong>ShopFlow</strong>
-            procesó aproximadamente <strong>${Math.round(resultado).toLocaleString()} solicitudes</strong>
-            durante las <strong>${horas} horas</strong> de operación (de ${DATOS.horas[a] || a + ':00'} a ${DATOS.horas[b] || b + ':00'}).</p>
-            <p>Esto equivale a un promedio de <strong>${Math.round(promedio)} solicitudes por hora</strong>.
-            La tasa máxima registrada por el modelo fue de <strong>${Math.round(pico)} solicitudes/hora</strong>.</p>
-            <p>En un contexto real, esta información permitiría al equipo de infraestructura
-            <strong>dimensionar correctamente los recursos del servidor</strong>, asegurando que pueda
-            manejar la carga sin degradar el rendimiento, y <strong>estimar los costos</strong> asociados
-            al procesamiento de solicitudes en plataformas cloud.</p>
+    const interp = document.getElementById('interpretacionTexto');
+    if (interp) {
+        interp.innerHTML = `
+            <p>El resultado de la integral definida indica que el sistema <strong>${d.nombre}</strong>
+            proceso aproximadamente <strong>${Math.round(res).toLocaleString()} ${unidad.split('/')[0]}</strong>
+            durante las <strong>${horas} horas</strong> del intervalo [${a}, ${b}].</p>
+            <p>Esto equivale a un promedio de <strong>${Math.round(prom)} ${unidad}</strong>.
+            La tasa maxima del modelo fue <strong>${Math.round(pico)} ${unidad}</strong>.</p>
+            <p>En un contexto real, esta informacion permite <strong>dimensionar recursos del servidor</strong>,
+            garantizar calidad de servicio y <strong>estimar costos</strong> de infraestructura cloud.</p>
         `;
     }
 }
 
-/** Animación de contador numérico */
-function animarContador(elementId, valorFinal, decimales) {
-    const el = document.getElementById(elementId);
+function animarContador(id, valorFinal) {
+    const el = document.getElementById(id);
     if (!el) return;
+    const dur = 1200, ini = performance.now();
+    function upd(now) {
+        const p = Math.min((now - ini) / dur, 1);
+        const e = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(valorFinal * e).toLocaleString();
+        if (p < 1) requestAnimationFrame(upd);
+        else el.textContent = Math.round(valorFinal).toLocaleString();
+    }
+    requestAnimationFrame(upd);
+}
 
-    const duracion = 1500;
-    const inicio = performance.now();
-    const valorInicio = 0;
+// ============================================
+// 7. SISTEMA DE ESCENARIOS
+// ============================================
 
-    function actualizar(ahora) {
-        const progreso = Math.min((ahora - inicio) / duracion, 1);
-        // Easing ease-out
-        const eased = 1 - Math.pow(1 - progreso, 3);
-        const valorActual = valorInicio + (valorFinal - valorInicio) * eased;
+function cargarEscenario(id) {
+    estado.escenarioActual = id;
 
-        el.textContent = Math.round(valorActual).toLocaleString();
-
-        if (progreso < 1) {
-            requestAnimationFrame(actualizar);
-        } else {
-            // Valor final exacto
-            el.textContent = decimales > 0
-                ? valorFinal.toFixed(decimales)
-                : Math.round(valorFinal).toLocaleString();
-        }
+    if (id === 'custom') {
+        // Mostrar editor personalizado
+        const ed = document.getElementById('customEditor');
+        if (ed) ed.style.display = 'block';
+        const desc = document.getElementById('scenarioDesc');
+        if (desc) desc.textContent = 'Ingresa tus propios datos para analizar cualquier escenario.';
+        return;
     }
 
-    requestAnimationFrame(actualizar);
+    // Ocultar editor personalizado
+    const ed = document.getElementById('customEditor');
+    if (ed) ed.style.display = 'none';
+
+    const esc = ESCENARIOS[id];
+    if (!esc) return;
+
+    estado.datosActuales = esc;
+
+    // Actualizar descripcion
+    const desc = document.getElementById('scenarioDesc');
+    if (desc) desc.innerHTML = `<strong>${esc.nombre}:</strong> ${esc.descripcion}`;
+
+    // Actualizar origen
+    const orig = document.getElementById('datosOrigen');
+    if (orig) orig.innerHTML = `<strong>Origen de los datos:</strong> ${esc.origen}`;
+
+    // Actualizar limites
+    const lA = document.getElementById('limiteA');
+    const lB = document.getElementById('limiteB');
+    if (lA) lA.value = esc.limA;
+    if (lB) lB.value = esc.limB;
+
+    recalcularTodo();
 }
 
-// ============================================
-// 6. INTERACTIVIDAD Y EVENTOS
-// ============================================
+function aplicarDatosCustom() {
+    const tInput = document.getElementById('customT');
+    const rInput = document.getElementById('customR');
+    if (!tInput || !rInput) return;
 
-/** Maneja el cambio de grado del polinomio */
-function configurarSelectorGrado() {
-    document.querySelectorAll('.degree-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            // Actualizar estado visual
-            document.querySelectorAll('.degree-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+    const tArr = tInput.value.split(',').map(Number).filter(n => !isNaN(n));
+    const rArr = rInput.value.split(',').map(Number).filter(n => !isNaN(n));
 
-            // Recalcular con nuevo grado
-            estado.grado = parseInt(btn.dataset.degree);
-            calcularRegresion();
-            crearGraficaRegresion();
-            renderizarFormulas();
-        });
-    });
+    if (tArr.length < 3 || rArr.length < 3 || tArr.length !== rArr.length) {
+        alert('Debes ingresar al menos 3 pares de datos validos y ambas listas deben tener la misma longitud.');
+        return;
+    }
+
+    estado.datosActuales = {
+        nombre: 'Escenario Personalizado',
+        descripcion: 'Datos ingresados manualmente por el usuario.',
+        origen: 'Datos personalizados ingresados durante la practica.',
+        tiempo: tArr,
+        solicitudes: rArr,
+        horas: tArr.map(t => 't=' + t),
+        observaciones: tArr.map(() => ''),
+        unidad: 'unidades/hora',
+        limA: Math.min(...tArr),
+        limB: Math.max(...tArr)
+    };
+
+    const lA = document.getElementById('limiteA');
+    const lB = document.getElementById('limiteB');
+    if (lA) lA.value = estado.datosActuales.limA;
+    if (lB) lB.value = estado.datosActuales.limB;
+
+    recalcularTodo();
 }
 
-/** Calcula la regresión con el grado actual */
-function calcularRegresion() {
-    estado.coeficientes = regresionPolinomial(DATOS.tiempo, DATOS.solicitudes, estado.grado);
-    estado.r2 = calcularR2(DATOS.tiempo, DATOS.solicitudes, estado.coeficientes);
+function recalcularTodo() {
+    const d = estado.datosActuales;
+    if (!d) return;
 
-    // Actualizar badge de R²
+    // Regresion
+    estado.coeficientes = regresionPolinomial(d.tiempo, d.solicitudes, estado.grado);
+    estado.r2 = calcularR2(d.tiempo, d.solicitudes, estado.coeficientes);
+
+    // Actualizar R2
     const r2El = document.getElementById('r2Value');
     if (r2El) r2El.textContent = estado.r2.toFixed(6);
-}
 
-/** Configura el botón de calcular integral */
-function configurarBotonIntegral() {
-    const btn = document.getElementById('btnCalcular');
-    if (!btn) return;
+    // Renderizar
+    renderTabla();
+    crearGraficaDispersion();
+    crearGraficaRegresion();
+    renderFormulas();
 
-    btn.addEventListener('click', () => {
-        const a = parseFloat(document.getElementById('limiteA').value) || 0;
-        const b = parseFloat(document.getElementById('limiteB').value) || 8;
-
-        if (a >= b) {
-            alert('El límite inferior debe ser menor que el superior.');
-            return;
-        }
-
-        // Calcular y mostrar
-        mostrarProcedimiento(a, b);
-        crearGraficaIntegral(a, b);
-        mostrarResultado(a, b);
-    });
+    // Calcular integral
+    const a = parseFloat(document.getElementById('limiteA')?.value) || d.limA;
+    const b = parseFloat(document.getElementById('limiteB')?.value) || d.limB;
+    mostrarProcedimiento(a, b);
+    crearGraficaIntegral(a, b);
+    mostrarResultado(a, b);
 }
 
 // ============================================
-// 7. ANIMACIONES DE SCROLL
+// 8. LABORATORIO INTERACTIVO
 // ============================================
 
-/** Activa animaciones al hacer scroll (Intersection Observer) */
-function iniciarAnimacionesScroll() {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
+function calcularLaboratorio() {
+    const tInput = document.getElementById('labT');
+    const rInput = document.getElementById('labR');
+    const gInput = document.getElementById('labGrado');
+    const aInput = document.getElementById('labA');
+    const bInput = document.getElementById('labB');
+    if (!tInput || !rInput) return;
+
+    const tArr = tInput.value.split(',').map(Number).filter(n => !isNaN(n));
+    const rArr = rInput.value.split(',').map(Number).filter(n => !isNaN(n));
+    const grado = parseInt(gInput?.value) || 3;
+    const a = parseFloat(aInput?.value) || 0;
+    const b = parseFloat(bInput?.value) || Math.max(...tArr);
+
+    if (tArr.length < 3 || rArr.length < 3 || tArr.length !== rArr.length) {
+        alert('Ingresa al menos 3 pares de datos validos.');
+        return;
+    }
+
+    if (a >= b) {
+        alert('El limite inferior debe ser menor que el superior.');
+        return;
+    }
+
+    const coefs = regresionPolinomial(tArr, rArr, grado);
+    const r2 = calcularR2(tArr, rArr, coefs);
+    const resultado = integralDefinida(coefs, a, b);
+
+    // Mostrar formula
+    renderKatex('labFormula', 'r(t) = ' + poliLatex(coefs));
+
+    // Mostrar R2
+    const r2El = document.getElementById('labR2');
+    if (r2El) r2El.textContent = r2.toFixed(6);
+
+    // Mostrar resultado
+    renderKatex('labResultado',
+        `\\int_{${a}}^{${b}} r(t)\\,dt \\approx ${resultado.toFixed(2)} \\text{ unidades}`
+    );
+
+    // Grafica
+    crearGraficaLab(tArr, rArr, coefs, a, b);
+}
+
+// ============================================
+// 9. EVENTOS E INICIALIZACION
+// ============================================
+
+function configurarEventos() {
+    // Selector de escenarios
+    document.querySelectorAll('.scenario-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.scenario-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            cargarEscenario(btn.dataset.id);
         });
-    }, { threshold: 0.1 });
+    });
 
-    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+    // Boton datos personalizados
+    const btnCustom = document.getElementById('btnCustomApply');
+    if (btnCustom) btnCustom.addEventListener('click', aplicarDatosCustom);
+
+    // Selector de grado
+    document.querySelectorAll('.degree-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.degree-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            estado.grado = parseInt(btn.dataset.degree);
+            recalcularTodo();
+        });
+    });
+
+    // Boton calcular integral
+    const btnCalc = document.getElementById('btnCalcular');
+    if (btnCalc) {
+        btnCalc.addEventListener('click', () => {
+            const a = parseFloat(document.getElementById('limiteA').value) || 0;
+            const b = parseFloat(document.getElementById('limiteB').value) || 8;
+            if (a >= b) { alert('Limite inferior debe ser menor que el superior.'); return; }
+            mostrarProcedimiento(a, b);
+            crearGraficaIntegral(a, b);
+            mostrarResultado(a, b);
+        });
+    }
+
+    // Laboratorio
+    const btnLab = document.getElementById('btnLab');
+    if (btnLab) btnLab.addEventListener('click', calcularLaboratorio);
 }
 
-/** Actualiza el enlace activo en la navegación según la sección visible */
-function iniciarNavegacionActiva() {
+function iniciarAnimaciones() {
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+
+    // Navegacion activa
     const secciones = document.querySelectorAll('section');
     const enlaces = document.querySelectorAll('.nav-links a');
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const id = entry.target.id;
-                enlaces.forEach(a => {
-                    a.classList.toggle('active', a.getAttribute('href') === '#' + id);
-                });
+    const navObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                const id = e.target.id;
+                enlaces.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
             }
         });
     }, { threshold: 0.3 });
-
-    secciones.forEach(sec => observer.observe(sec));
+    secciones.forEach(s => navObs.observe(s));
 }
 
-// ============================================
-// 8. INICIALIZACIÓN
-// ============================================
-
+// Inicio de la aplicacion
 document.addEventListener('DOMContentLoaded', () => {
-    // Calcular regresión inicial (grado 3)
-    calcularRegresion();
+    // Cargar escenario por defecto
+    estado.datosActuales = ESCENARIOS.ecommerce;
 
-    // Renderizar tabla de datos
-    renderizarTabla();
-
-    // Crear gráficas
-    crearGraficaDispersion();
-    crearGraficaRegresion();
-
-    // Esperar a que KaTeX cargue para renderizar fórmulas
-    const esperarKatex = setInterval(() => {
+    // Esperar a que KaTeX cargue
+    const esperar = setInterval(() => {
         if (typeof katex !== 'undefined') {
-            clearInterval(esperarKatex);
-            renderizarFormulas();
+            clearInterval(esperar);
+            recalcularTodo();
         }
     }, 100);
 
-    // Configurar interactividad
-    configurarSelectorGrado();
-    configurarBotonIntegral();
-
-    // Iniciar animaciones
-    iniciarAnimacionesScroll();
-    iniciarNavegacionActiva();
-
-    // Calcular integral automáticamente al cargar
+    // Fallback: si KaTeX tarda, iniciar sin formulas
     setTimeout(() => {
-        const btn = document.getElementById('btnCalcular');
-        if (btn) btn.click();
-    }, 500);
+        if (typeof katex === 'undefined') recalcularTodo();
+    }, 2000);
+
+    configurarEventos();
+    iniciarAnimaciones();
 });

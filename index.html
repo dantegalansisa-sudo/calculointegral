@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Integral Definida | Solicitudes de Servidor API</title>
+    <title>Proyecto Final | Integral Definida &mdash; ITLA</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 
-    <!-- KaTeX (renderizado de matemáticas) -->
+    <!-- KaTeX -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
 
@@ -21,128 +21,188 @@
 </head>
 <body>
 
-    <!-- ===================== NAVEGACIÓN ===================== -->
+    <!-- ==================== NAVEGACIÓN ==================== -->
     <nav id="navbar">
         <div class="nav-brand">
             <span class="nav-logo">&int;</span>
-            <span class="nav-title">Proyecto Integral</span>
+            <span class="nav-title">Proyecto Final</span>
         </div>
         <ul class="nav-links">
-            <li><a href="#hero" class="active">Inicio</a></li>
-            <li><a href="#introduccion">Intro</a></li>
-            <li><a href="#planteamiento">Problema</a></li>
-            <li><a href="#datos">Datos</a></li>
-            <li><a href="#funcion">Función</a></li>
-            <li><a href="#integral">Integral</a></li>
-            <li><a href="#interpretacion">Resultado</a></li>
-            <li><a href="#conclusiones">Conclusiones</a></li>
+            <li><a href="#portada" class="active">Portada</a></li>
+            <li><a href="#expo1" data-expo="1">Introduccion</a></li>
+            <li><a href="#expo2" data-expo="2">Datos y Funcion</a></li>
+            <li><a href="#expo3" data-expo="3">Integral</a></li>
+            <li><a href="#expo4" data-expo="4">Conclusiones</a></li>
+            <li><a href="#laboratorio">Laboratorio</a></li>
         </ul>
     </nav>
 
-    <!-- ===================== HERO / PORTADA ===================== -->
-    <section id="hero">
-        <div class="hero-bg-grid"></div>
-        <div class="hero-content">
-            <div class="hero-badge">Instituto Tecnológico de Las Américas &mdash; ITLA</div>
-            <h1>Aplicación de la <span class="gradient-text">Integral Definida</span></h1>
-            <p class="hero-subtitle">Volumen total de solicitudes procesadas por un servidor API en un intervalo de tiempo</p>
-            <div class="hero-meta">
-                <span>Cálculo Integral</span>
-                <span class="separator">&bull;</span>
-                <span>Desarrollo de Software</span>
-                <span class="separator">&bull;</span>
-                <span>2026</span>
+    <!-- ==================== PORTADA ==================== -->
+    <section id="portada">
+        <div class="portada-content">
+            <div class="portada-institution">Instituto Tecnologico de Las Americas &mdash; ITLA</div>
+            <h1>Proyecto Final<br><span class="gradient-text">Calculo Integral</span></h1>
+            <p class="portada-tema">Aplicaciones de la integral definida en contextos profesionales</p>
+            <div class="portada-subtitle">Volumen total de solicitudes procesadas por un sistema en un intervalo de tiempo</div>
+            <div class="portada-info">
+                <div class="info-item">
+                    <span class="info-label">Asignatura</span>
+                    <span class="info-value">Calculo Integral</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Carrera</span>
+                    <span class="info-value">Desarrollo de Software</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">Profesor</span>
+                    <span class="info-value">Maximiliano Alvarez Sepulveda</span>
+                </div>
             </div>
-            <div class="hero-formula-box" id="heroFormula"></div>
-            <a href="#introduccion" class="hero-cta">Explorar proyecto &darr;</a>
+
+            <!-- Equipo -->
+            <div class="team-section">
+                <h3 class="team-title">Integrantes del Equipo</h3>
+                <div class="team-grid">
+                    <div class="team-member expo-color-1">
+                        <div class="member-avatar">DG</div>
+                        <h4>Dante Galan Sisa</h4>
+                        <span class="matricula">20251858</span>
+                        <span class="member-role">Expositor 1</span>
+                    </div>
+                    <div class="team-member expo-color-2">
+                        <div class="member-avatar">--</div>
+                        <h4 class="nombre-pendiente" id="nombre2">Por confirmar</h4>
+                        <span class="matricula" id="mat2">--------</span>
+                        <span class="member-role">Expositor 2</span>
+                    </div>
+                    <div class="team-member expo-color-3">
+                        <div class="member-avatar">--</div>
+                        <h4 class="nombre-pendiente" id="nombre3">Por confirmar</h4>
+                        <span class="matricula" id="mat3">--------</span>
+                        <span class="member-role">Expositor 3</span>
+                    </div>
+                    <div class="team-member expo-color-4">
+                        <div class="member-avatar">--</div>
+                        <h4 class="nombre-pendiente" id="nombre4">Por confirmar</h4>
+                        <span class="matricula" id="mat4">--------</span>
+                        <span class="member-role">Expositor 4</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portada-hero-formula" id="heroFormula"></div>
+            <a href="#expo1" class="portada-cta">Iniciar Exposicion &darr;</a>
         </div>
     </section>
 
-    <!-- ===================== INTRODUCCIÓN ===================== -->
-    <section id="introduccion" class="section">
+    <!-- ==================== EXPOSITOR 1: INTRODUCCION + PLANTEAMIENTO ==================== -->
+    <section id="expo1" class="section">
         <div class="container fade-in">
+            <div class="expo-badge expo-bg-1">Expositor 1 &mdash; Dante Galan Sisa</div>
+
+            <!-- Introduccion -->
             <div class="section-header">
-                <span class="section-number">01</span>
-                <h2>Introducción</h2>
+                <span class="section-number nr-1">01</span>
+                <h2>Introduccion</h2>
             </div>
             <div class="content-grid two-col">
                 <div class="content-text">
-                    <p>La <strong>integral definida</strong> es una herramienta fundamental del cálculo que permite determinar la <em>acumulación total</em> de una cantidad variable a lo largo de un intervalo.</p>
-                    <p>En el mundo del desarrollo de software, los servidores procesan solicitudes a tasas que varían constantemente. Durante horas pico la carga se dispara, y en horas de baja actividad desciende considerablemente.</p>
-                    <p>Este proyecto modela la tasa de solicitudes procesadas por un servidor API de una plataforma de e-commerce durante <strong>8 horas laborales</strong>. Mediante la integral definida, calculamos el <strong>volumen total de solicitudes</strong> procesadas en ese período.</p>
+                    <p>La <strong>integral definida</strong> es una herramienta del calculo que permite calcular la <em>acumulacion total</em> de una cantidad que varia continuamente a lo largo de un intervalo.</p>
+                    <p>Si una funcion <strong>r(t)</strong> representa una tasa (cantidad por unidad de tiempo), entonces la integral definida de r(t) entre <strong>a</strong> y <strong>b</strong> nos da la <strong>cantidad total acumulada</strong> en ese periodo.</p>
+                    <p>En el desarrollo de software, los servidores procesan solicitudes a tasas que cambian a lo largo del dia. Conocer el total acumulado es esencial para planificar infraestructura.</p>
                 </div>
                 <div class="content-highlight">
                     <div class="highlight-card">
                         <div class="highlight-icon">&int;</div>
-                        <div class="highlight-text">
-                            <div id="mathIntro"></div>
-                            <p class="highlight-desc">= Total de solicitudes acumuladas</p>
-                        </div>
+                        <div id="mathIntro"></div>
+                        <p class="highlight-desc">= Cantidad total acumulada en [a, b]</p>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ===================== PLANTEAMIENTO ===================== -->
-    <section id="planteamiento" class="section">
-        <div class="container fade-in">
-            <div class="section-header">
-                <span class="section-number">02</span>
+            <!-- Planteamiento -->
+            <div class="section-header" style="margin-top:64px;">
+                <span class="section-number nr-1">02</span>
                 <h2>Planteamiento del Problema</h2>
             </div>
             <div class="cards-grid four-col">
                 <div class="card">
-                    <div class="card-icon">&#9655;</div>
+                    <div class="card-icon-box">1</div>
                     <h3>Contexto</h3>
-                    <p>Un servidor API REST de la plataforma <strong>"ShopFlow"</strong> (e-commerce) procesa solicitudes HTTP: navegación, búsqueda de productos y compras.</p>
+                    <p>Servidores API REST procesan solicitudes HTTP cuya tasa varia durante el dia segun la demanda de usuarios.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#9671;</div>
-                    <h3>Variable de estudio</h3>
-                    <p><strong>r(t)</strong> = tasa de solicitudes por hora. <strong>t</strong> = horas desde inicio de jornada (t=0 corresponde a 8:00 AM).</p>
+                    <div class="card-icon-box">2</div>
+                    <h3>Variable</h3>
+                    <p><strong>r(t)</strong> = tasa de solicitudes por hora.<br><strong>t</strong> = tiempo en horas desde el inicio del monitoreo.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#9678;</div>
+                    <div class="card-icon-box">3</div>
                     <h3>Objetivo</h3>
-                    <p>Calcular el <strong>número total de solicitudes</strong> procesadas en 8 horas usando la integral definida de r(t) en el intervalo [0, 8].</p>
+                    <p>Calcular el <strong>total de solicitudes</strong> procesadas usando la integral definida de r(t).</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon">&#9733;</div>
-                    <h3>Aplicación</h3>
-                    <p>Planificar <strong>capacidad del servidor</strong>, estimar costos en la nube (AWS/Azure) y optimizar recursos de infraestructura.</p>
+                    <div class="card-icon-box">4</div>
+                    <h3>Aplicacion</h3>
+                    <p>Dimensionar servidores, estimar costos cloud (AWS/Azure) y planificar escalamiento.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===================== DATOS ===================== -->
-    <section id="datos" class="section">
+    <!-- ==================== EXPOSITOR 2: DATOS Y FUNCION ==================== -->
+    <section id="expo2" class="section section-alt">
         <div class="container fade-in">
+            <div class="expo-badge expo-bg-2">Expositor 2</div>
+
+            <!-- Selector de escenario -->
             <div class="section-header">
-                <span class="section-number">03</span>
+                <span class="section-number nr-2">03</span>
                 <h2>Datos Utilizados</h2>
             </div>
-            <div class="datos-intro">
-                <p>Se simularon datos coherentes de monitoreo del servidor durante una jornada laboral típica. Los valores reflejan el comportamiento esperado: baja actividad al inicio, pico al mediodía y descenso al cierre.</p>
-                <div class="datos-origen">
-                    <strong>Origen de los datos:</strong> Simulación basada en patrones reales de tráfico web de plataformas e-commerce (comportamiento típico documentado en estudios de Cloudflare y AWS).
+
+            <div class="scenario-selector">
+                <span class="scenario-label">Seleccionar escenario:</span>
+                <div class="scenario-buttons" id="scenarioBtns">
+                    <button class="scenario-btn active" data-id="ecommerce">E-Commerce API</button>
+                    <button class="scenario-btn" data-id="streaming">Streaming Server</button>
+                    <button class="scenario-btn" data-id="delivery">App de Delivery</button>
+                    <button class="scenario-btn" data-id="custom">Personalizado</button>
                 </div>
             </div>
+
+            <div class="scenario-description" id="scenarioDesc"></div>
+
+            <!-- Editor de datos personalizado (oculto por defecto) -->
+            <div class="custom-editor" id="customEditor" style="display:none;">
+                <h4>Ingresa tus datos</h4>
+                <div class="custom-inputs">
+                    <div class="custom-field">
+                        <label>Valores de t (separados por coma):</label>
+                        <input type="text" id="customT" placeholder="0,1,2,3,4,5,6,7,8">
+                    </div>
+                    <div class="custom-field">
+                        <label>Valores de r(t) (separados por coma):</label>
+                        <input type="text" id="customR" placeholder="120,205,340,435,410,390,310,200,85">
+                    </div>
+                    <button class="btn-primary" id="btnCustomApply">Aplicar datos</button>
+                </div>
+            </div>
+
+            <div class="datos-origen" id="datosOrigen"></div>
+
             <div class="datos-grid">
                 <div class="table-wrapper">
-                    <table id="datosTable">
+                    <table>
                         <thead>
                             <tr>
                                 <th>t (horas)</th>
-                                <th>Hora del día</th>
+                                <th>Hora</th>
                                 <th>r(t) (sol/hora)</th>
-                                <th>Observación</th>
+                                <th>Observacion</th>
                             </tr>
                         </thead>
-                        <tbody id="datosBody">
-                            <!-- Llenado por JavaScript -->
-                        </tbody>
+                        <tbody id="datosBody"></tbody>
                     </table>
                 </div>
                 <div class="chart-box">
@@ -150,100 +210,85 @@
                     <canvas id="chartDispersion"></canvas>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- ===================== FUNCIÓN ===================== -->
-    <section id="funcion" class="section">
-        <div class="container fade-in">
-            <div class="section-header">
-                <span class="section-number">04</span>
-                <h2>Construcción de la Función</h2>
+            <!-- Construccion de la funcion -->
+            <div class="section-header" style="margin-top:64px;">
+                <span class="section-number nr-2">04</span>
+                <h2>Construccion de la Funcion</h2>
             </div>
-            <div class="funcion-content">
-                <div class="method-box">
-                    <h3>Método: Regresión Polinomial por Mínimos Cuadrados</h3>
-                    <p>Se ajusta un polinomio a los datos minimizando la suma de errores al cuadrado. Este método garantiza el mejor ajuste posible para el grado seleccionado.</p>
+            <div class="method-box">
+                <h3>Metodo: Regresion Polinomial por Minimos Cuadrados</h3>
+                <p>Se ajusta un polinomio a los datos de forma que la suma de los errores al cuadrado sea minima. Esto garantiza el mejor ajuste posible para el grado elegido.</p>
+            </div>
+            <div class="degree-selector">
+                <span class="degree-label">Grado del polinomio:</span>
+                <div class="degree-buttons">
+                    <button class="degree-btn" data-degree="2">Cuadratico</button>
+                    <button class="degree-btn active" data-degree="3">Cubico</button>
+                    <button class="degree-btn" data-degree="4">Grado 4</button>
                 </div>
-                <div class="degree-selector">
-                    <span class="degree-label">Grado del polinomio:</span>
-                    <div class="degree-buttons">
-                        <button class="degree-btn" data-degree="2">Cuadrático</button>
-                        <button class="degree-btn active" data-degree="3">Cúbico</button>
-                        <button class="degree-btn" data-degree="4">Grado 4</button>
-                    </div>
-                </div>
-                <div class="formula-result">
-                    <div class="formula-display" id="formulaDisplay"></div>
-                    <div class="r2-badge" id="r2Badge">
-                        R&sup2; = <span id="r2Value">---</span>
-                    </div>
-                </div>
-                <div class="chart-box chart-wide">
-                    <h3>Curva de Regresión sobre los Datos</h3>
-                    <canvas id="chartRegresion"></canvas>
-                </div>
+            </div>
+            <div class="formula-result">
+                <div class="formula-display" id="formulaDisplay"></div>
+                <div class="r2-badge">R&sup2; = <span id="r2Value">---</span></div>
+            </div>
+            <div class="chart-box chart-wide">
+                <h3>Curva de Regresion sobre los Datos</h3>
+                <canvas id="chartRegresion"></canvas>
             </div>
         </div>
     </section>
 
-    <!-- ===================== INTEGRAL ===================== -->
-    <section id="integral" class="section">
+    <!-- ==================== EXPOSITOR 3: INTEGRAL + INTERPRETACION ==================== -->
+    <section id="expo3" class="section">
         <div class="container fade-in">
+            <div class="expo-badge expo-bg-3">Expositor 3</div>
+
             <div class="section-header">
-                <span class="section-number">05</span>
-                <h2>Cálculo de la Integral Definida</h2>
+                <span class="section-number nr-3">05</span>
+                <h2>Calculo de la Integral Definida</h2>
             </div>
-            <div class="integral-content">
-                <div class="integral-setup">
-                    <h3>Planteamiento</h3>
-                    <div class="math-block" id="integralSetup"></div>
-                </div>
 
-                <div class="integral-controls">
-                    <div class="control-group">
-                        <label for="limiteA">Límite inferior (a):</label>
-                        <input type="number" id="limiteA" value="0" min="0" max="8" step="0.5">
-                    </div>
-                    <div class="control-group">
-                        <label for="limiteB">Límite superior (b):</label>
-                        <input type="number" id="limiteB" value="8" min="0" max="8" step="0.5">
-                    </div>
-                    <button id="btnCalcular" class="btn-primary">Calcular Integral</button>
-                </div>
-
-                <div class="procedimiento" id="procedimiento">
-                    <!-- Procedimiento paso a paso generado por JS -->
-                </div>
-
-                <div class="resultado-box" id="resultadoBox" style="display:none;">
-                    <div class="resultado-label">Total de solicitudes procesadas</div>
-                    <div class="resultado-valor" id="resultadoValor">0</div>
-                    <div class="resultado-unidad">solicitudes</div>
-                </div>
-
-                <div class="chart-box chart-wide">
-                    <h3>Área bajo la curva &mdash; Integral definida</h3>
-                    <canvas id="chartIntegral"></canvas>
-                </div>
+            <div class="integral-setup">
+                <h3>Planteamiento</h3>
+                <div class="math-block" id="integralSetup"></div>
             </div>
-        </div>
-    </section>
 
-    <!-- ===================== INTERPRETACIÓN ===================== -->
-    <section id="interpretacion" class="section">
-        <div class="container fade-in">
-            <div class="section-header">
-                <span class="section-number">06</span>
-                <h2>Interpretación del Resultado</h2>
+            <div class="integral-controls">
+                <div class="control-group">
+                    <label for="limiteA">Limite inferior (a):</label>
+                    <input type="number" id="limiteA" value="0" min="0" max="100" step="0.5">
+                </div>
+                <div class="control-group">
+                    <label for="limiteB">Limite superior (b):</label>
+                    <input type="number" id="limiteB" value="8" min="0" max="100" step="0.5">
+                </div>
+                <button id="btnCalcular" class="btn-primary">Calcular Integral</button>
             </div>
-            <div class="interpretacion-text" id="interpretacionTexto">
-                <!-- Generado por JS -->
+
+            <div class="procedimiento" id="procedimiento"></div>
+
+            <div class="resultado-box" id="resultadoBox" style="display:none;">
+                <div class="resultado-label">Total acumulado</div>
+                <div class="resultado-valor" id="resultadoValor">0</div>
+                <div class="resultado-unidad" id="resultadoUnidad">solicitudes</div>
             </div>
+
+            <div class="chart-box chart-wide">
+                <h3>Area bajo la curva &mdash; Integral definida</h3>
+                <canvas id="chartIntegral"></canvas>
+            </div>
+
+            <!-- Interpretacion -->
+            <div class="section-header" style="margin-top:64px;">
+                <span class="section-number nr-3">06</span>
+                <h2>Interpretacion del Resultado</h2>
+            </div>
+            <div class="interpretacion-text" id="interpretacionTexto"></div>
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-number" id="statTotal">---</div>
-                    <div class="stat-label">Solicitudes totales</div>
+                    <div class="stat-label">Total acumulado</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statPromedio">---</div>
@@ -251,54 +296,110 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statPico">---</div>
-                    <div class="stat-label">Tasa máxima (pico)</div>
+                    <div class="stat-label">Tasa maxima (pico)</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-number" id="statR2">---</div>
-                    <div class="stat-label">Precisión del modelo</div>
+                    <div class="stat-label">Precision del modelo</div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ===================== CONCLUSIONES ===================== -->
-    <section id="conclusiones" class="section">
+    <!-- ==================== EXPOSITOR 4: CONCLUSIONES ==================== -->
+    <section id="expo4" class="section section-alt">
         <div class="container fade-in">
+            <div class="expo-badge expo-bg-4">Expositor 4</div>
+
             <div class="section-header">
-                <span class="section-number">07</span>
-                <h2>Conclusiones y Reflexión</h2>
+                <span class="section-number nr-4">07</span>
+                <h2>Conclusiones y Reflexion</h2>
             </div>
             <div class="conclusiones-grid">
                 <div class="conclusion-card">
-                    <h3>Conclusión Matemática</h3>
-                    <p>La integral definida permitió calcular la acumulación total de solicitudes como una cantidad continua, superando la simple suma discreta. El modelo polinómico capturó con alta precisión el comportamiento variable del servidor a lo largo del día.</p>
+                    <h3>Conclusion Matematica</h3>
+                    <p>La integral definida nos permitio calcular la acumulacion total de solicitudes como una cantidad continua, yendo mas alla de la simple suma discreta de datos puntuales. El modelo polinomico capturo con alta precision el comportamiento variable del servidor.</p>
                 </div>
                 <div class="conclusion-card">
-                    <h3>Aplicación en Desarrollo de Software</h3>
-                    <p>Conocer el volumen total de solicitudes es clave para: <strong>dimensionar servidores</strong> en la nube, <strong>estimar costos</strong> de infraestructura (AWS, Azure y GCP cobran por solicitud), y <strong>planificar escalamiento automático</strong> durante horas pico.</p>
+                    <h3>Aplicacion en Desarrollo de Software</h3>
+                    <p>Conocer el volumen total de solicitudes es clave para: <strong>dimensionar servidores</strong> en la nube, <strong>estimar costos</strong> de infraestructura (AWS, Azure y GCP cobran por solicitud), y <strong>planificar escalamiento automatico</strong> durante horas pico.</p>
                 </div>
                 <div class="conclusion-card">
-                    <h3>Reflexión sobre lo Aprendido</h3>
-                    <p>El cálculo integral no es solo teoría: es una herramienta aplicable al día a día del ingeniero de software. Modelar, integrar e interpretar datos permite tomar decisiones informadas sobre infraestructura y rendimiento.</p>
+                    <h3>Reflexion sobre lo Aprendido</h3>
+                    <p>El calculo integral no es solo teoria abstracta: es una herramienta aplicable al dia a dia del ingeniero de software. Modelar, integrar e interpretar datos permite tomar decisiones informadas sobre infraestructura y rendimiento de sistemas.</p>
                 </div>
             </div>
             <div class="bibliografia-box">
-                <h3>Bibliografía</h3>
+                <h3>Bibliografia</h3>
                 <ul>
-                    <li>Stewart, J. <em>Cálculo de una variable: Trascendentes tempranas.</em> 8va ed. Cengage Learning.</li>
-                    <li>Larson, R. y Edwards, B. <em>Cálculo.</em> 11va ed. Cengage Learning.</li>
-                    <li>Burden, R. y Faires, J. <em>Análisis Numérico.</em> 10ma ed. Cengage Learning.</li>
-                    <li>Notas de clase &mdash; Cálculo Integral, ITLA 2026.</li>
+                    <li>Stewart, J. <em>Calculo de una variable: Trascendentes tempranas.</em> 8va ed. Cengage Learning.</li>
+                    <li>Larson, R. y Edwards, B. <em>Calculo.</em> 11va ed. Cengage Learning.</li>
+                    <li>Burden, R. y Faires, J. <em>Analisis Numerico.</em> 10ma ed. Cengage Learning.</li>
+                    <li>Notas de clase &mdash; Calculo Integral, ITLA 2026.</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- ===================== FOOTER ===================== -->
+    <!-- ==================== LABORATORIO INTERACTIVO ==================== -->
+    <section id="laboratorio" class="section">
+        <div class="container fade-in">
+            <div class="expo-badge expo-bg-lab">Laboratorio Interactivo &mdash; Preguntas y Practica</div>
+
+            <div class="section-header">
+                <span class="section-number nr-lab">LAB</span>
+                <h2>Laboratorio de Practica</h2>
+            </div>
+            <p class="lab-desc">Espacio interactivo para practicar con diferentes datos durante la exposicion. Cambia el escenario, edita valores y observa como cambia el resultado de la integral.</p>
+
+            <div class="lab-grid">
+                <div class="lab-panel">
+                    <h3>Datos de entrada</h3>
+                    <div class="lab-field">
+                        <label>Valores de t (separados por coma):</label>
+                        <input type="text" id="labT" value="0,1,2,3,4,5,6,7,8">
+                    </div>
+                    <div class="lab-field">
+                        <label>Valores de r(t) (separados por coma):</label>
+                        <input type="text" id="labR" value="120,205,340,435,410,390,310,200,85">
+                    </div>
+                    <div class="lab-row">
+                        <div class="lab-field lab-half">
+                            <label>Grado:</label>
+                            <select id="labGrado">
+                                <option value="2">2 (Cuadratico)</option>
+                                <option value="3" selected>3 (Cubico)</option>
+                                <option value="4">4 (Grado 4)</option>
+                            </select>
+                        </div>
+                        <div class="lab-field lab-half">
+                            <label>Limites [a, b]:</label>
+                            <div class="lab-limits">
+                                <input type="number" id="labA" value="0" step="0.5">
+                                <span>a</span>
+                                <input type="number" id="labB" value="8" step="0.5">
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-primary btn-full" id="btnLab">Calcular todo</button>
+                </div>
+                <div class="lab-results">
+                    <div class="lab-formula" id="labFormula"></div>
+                    <div class="lab-r2">R&sup2; = <span id="labR2">---</span></div>
+                    <div class="lab-integral-result" id="labResultado"></div>
+                    <div class="chart-box">
+                        <canvas id="chartLab"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== FOOTER ==================== -->
     <footer>
         <div class="container">
-            <p>Proyecto Integrador &mdash; Cálculo Integral &mdash; ITLA 2026</p>
-            <p class="footer-sub">Desarrollo de Software</p>
+            <p>Proyecto Final &mdash; Calculo Integral &mdash; ITLA 2026</p>
+            <p class="footer-sub">Profesor: Maximiliano Alvarez Sepulveda &bull; Desarrollo de Software</p>
         </div>
     </footer>
 
