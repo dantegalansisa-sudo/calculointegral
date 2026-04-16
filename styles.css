@@ -43,6 +43,8 @@
     --expo-3-bg: #d1fae5;
     --expo-4: #ea580c;
     --expo-4-bg: #ffedd5;
+    --expo-5: #0891b2;
+    --expo-5-bg: #cffafe;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -227,9 +229,9 @@ body {
 
 .team-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
     gap: 16px;
-    max-width: 800px;
+    max-width: 950px;
     margin: 0 auto;
 }
 
@@ -264,6 +266,7 @@ body {
 .expo-color-2 .member-avatar { background: var(--expo-2); }
 .expo-color-3 .member-avatar { background: var(--expo-3); }
 .expo-color-4 .member-avatar { background: var(--expo-4); }
+.expo-color-5 .member-avatar { background: var(--expo-5); }
 
 .team-member h4 {
     font-size: 0.9rem;
@@ -294,6 +297,7 @@ body {
 .expo-color-2 .member-role { background: var(--expo-2-bg); color: var(--expo-2); }
 .expo-color-3 .member-role { background: var(--expo-3-bg); color: var(--expo-3); }
 .expo-color-4 .member-role { background: var(--expo-4-bg); color: var(--expo-4); }
+.expo-color-5 .member-role { background: var(--expo-5-bg); color: var(--expo-5); }
 
 .portada-hero-formula {
     background: var(--bg-card);
@@ -346,6 +350,7 @@ body {
 .expo-bg-2 { background: var(--expo-2-bg); color: var(--expo-2); }
 .expo-bg-3 { background: var(--expo-3-bg); color: var(--expo-3); }
 .expo-bg-4 { background: var(--expo-4-bg); color: var(--expo-4); }
+.expo-bg-5 { background: var(--expo-5-bg); color: var(--expo-5); }
 .expo-bg-lab { background: var(--lab-light); color: var(--lab-color); }
 
 .section-header {
@@ -367,6 +372,7 @@ body {
 .nr-2 { background: var(--expo-2-bg); color: var(--expo-2); }
 .nr-3 { background: var(--expo-3-bg); color: var(--expo-3); }
 .nr-4 { background: var(--expo-4-bg); color: var(--expo-4); }
+.nr-5 { background: var(--expo-5-bg); color: var(--expo-5); }
 .nr-lab { background: var(--lab-light); color: var(--lab-color); }
 
 .section-header h2 {
@@ -1060,7 +1066,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
     }
 
     .team-grid {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(3, 1fr);
     }
 
     .nav-links { display: none; }
